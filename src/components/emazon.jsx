@@ -32,7 +32,7 @@ function Emazon() {
           className="px-4 py-2 bg-black text-white rounded-md "
           onClick={() => setCount(count + 1)}
         >
-          Load More Products
+          {count > 0 ? 'Load More Products': 'Load More Products' }
         </button>
       </div>
       {count > 0 && (
