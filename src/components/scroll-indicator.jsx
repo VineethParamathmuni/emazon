@@ -24,7 +24,7 @@ function ScrollIndicator() {
   return (
     <div
       style={{ height: `${scrollPercent}vh`, position: "fixed" }}
-      className="bg-black px-1 text-white"
+      className="bg-black px-0.5 text-white mx-0.5"
     ></div>
   );
 }
