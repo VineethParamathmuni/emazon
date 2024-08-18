@@ -23,8 +23,7 @@ const emazSlice = createSlice({
         addToList : (state, action) => {
             if(!state.products.includes(...action.payload)){
                 state.products.push(...action.payload) 
-            }
-            console.log(state.products[0])
+            }            
         }
     }
 })
