@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { addToList } from './reducer';
-import { useEffectAfterMount } from '../components/useEffectAfterMount'
+import { useEffect } from 'react';
 
 
 function EmazonStateFiller({count}) {
@@ -14,7 +14,7 @@ function EmazonStateFiller({count}) {
         }
     }
 
-    useEffectAfterMount(() => {
+    useEffect(() => {
         fillData();
     }, [count])    
 }
