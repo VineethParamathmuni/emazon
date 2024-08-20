@@ -9,7 +9,7 @@ function App() {
         <ScrollIndicator />
       </div>
       <Review leng={5} />
-      <Emazon />
+      <Emazon />      
     </div>
   );
 }
