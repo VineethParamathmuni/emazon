@@ -1,12 +1,26 @@
 import React from "react";
 import EmazonStateFiller from "../state/emazonStateFiller";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
 function Emazon() {
   const [count, setCount] = useState(0);
   const [hoverImage, setHoverImage] = useState("");
+  const [prods, setProds] = useState([]);
   const products = useSelector((state) => state.emaz.products);
+  const [pagination, setPagination] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 10;
+  const lastIndex = currentPage * productsPerPage;
+  const firstIndex = (currentPage -  1) * productsPerPage;
+  const totalPages = Math.ceil(products.length / productsPerPage);
+  const displayProducts = products.slice(firstIndex, lastIndex);
+
+  useEffect(() => {
+    pagination ? setProds(displayProducts) : setProds(products) 
+  }, [pagination, products, currentPage]);
+
   function handleDown() {
     window.scrollTo({
       top: 0,
@@ -18,8 +32,18 @@ function Emazon() {
   return (
     <div className="mt-5 mb-4 space-y-6">
       <EmazonStateFiller count={count} />
+      <div className="flex flex-row-reverse items-end">
+        <button
+          className="px-4 py-2 bg-black text-white rounded-md mx-2"
+          onClick={() => {
+            setPagination(!pagination);
+          }}
+        >
+          {pagination ? "turn off pagination" : "turn on pagination"}
+        </button>
+      </div>      
       <div className="grid grid-auto-fit-md place-items-stretch gap-10 mx-4">
-        {products.map((product) => (
+        {prods.map((product) => (
           <div className="px-4 py-2" key={product.id}>
             <div className="flex flex-col rounded-md items-center shadow-lg">
               <img
@@ -32,6 +56,36 @@ function Emazon() {
           </div>
         ))}
       </div>
+      {pagination ? (
+        <div className="flex flex-row justify-center gap-4">
+          <button
+            className="px-4 py-2 bg-black text-white rounded-md disabled:bg-gray-700"
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((prevPage) => prevPage - 1)}
+          >
+            Previous
+          </button>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index}
+              className={`py-2 bg-black text-white rounded-md ${
+                index + 1 === currentPage ? "px-4" : "px-2"
+              }`}
+              onClick={() => setCurrentPage(index + 1)}
+            >
+              {index + 1}
+            </button>
+          ))}
+          <button
+            className="px-4 py-2 bg-black text-white rounded-md disabled:bg-gray-700"
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(currentPage + 1)}
+          >
+            Next
+          </button>
+        </div>
+      ) : null}
+
       <div className="flex justify-center">
         <button
           className="px-4 py-2 bg-black text-white rounded-md "
