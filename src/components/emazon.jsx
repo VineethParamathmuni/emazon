@@ -9,39 +9,17 @@ function Emazon() {
   const [prods, setProds] = useState([]);
   const products = useSelector((state) => state.emaz.products);
   const [pagination, setPagination] = useState(false);
-  const [position, setPosition] = useState(null);
-  const [finalPosition, setFinalPosition] = useState(null);
 
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 10;
   const lastIndex = currentPage * productsPerPage;
-  const firstIndex = (currentPage - 1) * productsPerPage;
+  const firstIndex = (currentPage -  1) * productsPerPage;
   const totalPages = Math.ceil(products.length / productsPerPage);
   const displayProducts = products.slice(firstIndex, lastIndex);
 
   useEffect(() => {
-    pagination ? setProds(displayProducts) : setProds(products);    
+    pagination ? setProds(displayProducts) : setProds(products) 
   }, [pagination, products, currentPage]);
-
-  useEffect(() => {
-    function sett() {
-      setPosition(document.documentElement.scrollTop);
-      setFinalPosition(
-        document.documentElement.scrollHeight -
-          document.documentElement.clientHeight
-      );
-      if(position === finalPosition && pagination == false) {
-        setCount(prev => prev + 1)
-      } 
-    }
-    window.addEventListener("scroll", sett);       
-    
-    return () => window.removeEventListener("scroll", sett);
-  }, [position, finalPosition])
-
-  console.log(position, "Position");
-  console.log(finalPosition, "Final Position");
-  console.log(count, "Count")
 
   function handleDown() {
     window.scrollTo({
@@ -55,7 +33,6 @@ function Emazon() {
     <div className="mt-5 mb-4 space-y-6">
       <EmazonStateFiller count={count} />
       <div className="flex flex-row-reverse items-end">
-        <p className="px-4 py-2 bg-black text-white rounded-md">{products.length}</p>
         <button
           className="px-4 py-2 bg-black text-white rounded-md mx-2"
           onClick={() => {
@@ -64,7 +41,7 @@ function Emazon() {
         >
           {pagination ? "turn off pagination" : "turn on pagination"}
         </button>
-      </div>
+      </div>      
       <div className="grid grid-auto-fit-md place-items-stretch gap-10 mx-4">
         {prods.map((product) => (
           <div className="px-4 py-2" key={product.id}>
@@ -109,18 +86,18 @@ function Emazon() {
         </div>
       ) : null}
 
-      {/* {position === finalPosition && <div className="flex justify-center">
+      <div className="flex justify-center">
         <button
-          className="px-4 py-2 bg-black text-white rounded-md block fixed bottom-5 left-7 z-[99]"
+          className="px-4 py-2 bg-black text-white rounded-md "
           onClick={() => setCount(count + 1)}
         >
           {products.length > 0 ? "Load More Products" : "Load Products"}
         </button>
-      </div> } */}
-      {position > 20 && (
+      </div>
+      {count > 0 && (
         <button
           onClick={handleDown}
-          className="block fixed bottom-5 right-7 z-[99] text-white text-lg border-none outline-none bg-black cursor-pointer px-4 py-2 rounded-md"
+          className="rounded-md bg-black text-white px-4 py-2 mx-3"
         >
           Go to Top
         </button>
